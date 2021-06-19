@@ -1,1 +1,1 @@
-# weddpicks
+# weddpics

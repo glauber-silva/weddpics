@@ -30,7 +30,7 @@ class PhotosList(Resource):
 
 @ns.route('/<photo_id>')
 @ns.param('photo_id', 'The photo identifier')
-class Photo(Resource):
+class Photos(Resource):
 
     @ns.doc('get_photo')
     @ns.response(code=200, description="Return a photos")

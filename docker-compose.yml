@@ -1,0 +1,61 @@
+version: "3"
+
+services:
+
+
+  web:
+    container_name: weddpics_web
+    hostname: weddpics
+    build:
+      context: .
+    environment:
+      - FLASK_APP=app/__init__.py
+      - FLASK_ENV=Development
+      - APP_SETTINGS=app.config.DevelopmentConfig
+      - MONGODB_DATABASE=weddpics
+      - MONGODB_HOST=localhost
+      - MONGODB_USERNAME=weddpics
+      - MONGODB_PASSWORD=weddpwd
+    volumes:
+    - ${PWD}:/home/weddpics
+    ports:
+    - "5000:5000"
+    depends_on:
+      - mongodb
+    networks:
+      - galleryfrontend
+      - gallerybackend
+
+  mongodb:
+    image: mongo:latest
+    restart: on-failure
+    command: mongod --auth
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: teste
+      MONGO_INITDB_ROOT_PASSWORD: teste
+      MONGO_INITDB_DATABASE: weddpics
+      MONGODB_DATA_DIR: /data/db
+      MONDODB_LOG_DIR: /dev/null
+    ports:
+      - "27017:27017"
+    networks:
+      - gallerybackend
+
+#  mongo_express:
+#    image: mongo-express
+#    ports:
+#      - "8081:8081"
+#    links:
+#      - mongodb
+#    environment:
+#      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+#      - ME_CONFIG_MONGODB_SERVER=mongo
+#    networks:
+#      - gallerybackend
+
+
+networks:
+  galleryfrontend:
+    driver: bridge
+  gallerybackend:
+    driver: bridge

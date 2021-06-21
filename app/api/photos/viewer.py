@@ -23,8 +23,7 @@ class PhotosList(Resource):
     def post(self):
         """ Insert a list of photos"""
         body = request.json
-        photos = Photo(**body).save()
-        photos.to_json()
+        photos = Photo(**body).save().to_json()
         return make_response(photos, HTTPStatus.CREATED)
 
 
@@ -52,8 +51,8 @@ class Photos(Resource):
         :return:
         """
         body = request.json
-        photo = Photo.objects.get(id=photo_id).update(**body)
-        return make_response(photo.to_json(), HTTPStatus.CREATED)
+        Photo.objects.get(id=photo_id).update(**body)
+        return make_response(jsonify({'message': 'updated'}), HTTPStatus.CREATED)
 
     @ns.doc('delete_photo')
     @ns.response(code=200, description="Delete a photo")

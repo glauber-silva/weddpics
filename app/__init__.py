@@ -1,18 +1,20 @@
 import os
 
-from flask import Flask, Blueprint
+from flask import Flask
 from flask_mongoengine import MongoEngine
-from flask_restx import Api
+from werkzeug.middleware.proxy_fix import ProxyFix
+
+from app.api import api
+from app.api import api_bp
 from app.config import DevelopmentConfig, TestingConfig, ProductionConfig
 from app.api.health.viewer import ns as health
-
+from app.api.photos.viewer import ns as photos
 db = MongoEngine()
-api = Api()
 
 
 def create_app(deploy_env: str = os.getenv('FLASK_ENV', 'Development')) -> Flask:
     app = Flask(__name__)
-
+    app.wsgi_app = ProxyFix(app.wsgi_app)
     configuration = {
         'Development': DevelopmentConfig,
         'Testing': TestingConfig,
@@ -23,14 +25,10 @@ def create_app(deploy_env: str = os.getenv('FLASK_ENV', 'Development')) -> Flask
 
     __configure_extensions(app)
 
-    blueprint = Blueprint("login", __name__)
-    app.register_blueprint(blueprint)
-    api.add_namespace(health, "/health")
-
+    app.register_blueprint(api_bp)
     return app
 
 
 def __configure_extensions(app: Flask):
     db.init_app(app)
-    api.init_app(app)
 

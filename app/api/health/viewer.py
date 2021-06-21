@@ -1,12 +1,9 @@
 from http import HTTPStatus
 
 from flask import make_response, jsonify
-from flask_restx import Resource
+from flask_restx import Resource, Namespace
 
-from app.api import api
-
-
-ns = api.namespace("health", description="Retrieve healthcheck information")
+ns = Namespace("health", "Retrieve health check information")
 
 
 @ns.route("/", methods=["GET"])

@@ -19,13 +19,13 @@ class PhotosList(Resource):
         photos = Photo.objects().to_json()
         return make_response(photos, HTTPStatus.OK)
 
-    @ns.response(code=201, description="Create photos")
+    @ns.response(code=201, description="Create photo")
     def post(self):
         """ Insert a list of photos"""
         body = request.json
-        photo = Photo(**body).save()
-        photo_id = photo.id
-        return make_response(jsonify({'id': str(photo_id)}), HTTPStatus.CREATED)
+        photos = Photo(**body).save()
+        photos.to_json()
+        return make_response(photos, HTTPStatus.CREATED)
 
 
 @ns.route('/<photo_id>')

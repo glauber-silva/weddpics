@@ -4,6 +4,7 @@ from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_mongoengine import MongoEngine
 from werkzeug.middleware.proxy_fix import ProxyFix
+from flask_jwt_extended import JWTManager
 
 from app.api import api
 from app.api import api_bp
@@ -12,6 +13,8 @@ from app.api.health.viewer import ns as health
 from app.api.photos.viewer import ns as photos
 db = MongoEngine()
 bcrypt = Bcrypt()
+jwt = JWTManager()
+
 
 def create_app(deploy_env: str = os.getenv('FLASK_ENV', 'Development')) -> Flask:
     app = Flask(__name__)
@@ -33,4 +36,4 @@ def create_app(deploy_env: str = os.getenv('FLASK_ENV', 'Development')) -> Flask
 def __configure_extensions(app: Flask):
     db.init_app(app)
     bcrypt.init_app(app)
-
+    jwt.init_app(app)

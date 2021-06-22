@@ -13,6 +13,7 @@ class Config:
         'username': os.environ.get('MONGODB_USERNAME'),
         'password': os.environ.get('MONGODB_PASSWORD')
     }
+    JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
 
 
 class DevelopmentConfig(Config):

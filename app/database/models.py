@@ -17,7 +17,7 @@ class User(Document):
     is_active = BooleanField(default=True, blank=True, null=True)
     created = DateTimeField()
     updated = DateTimeField()
-    photos = ListField(ReferenceField('Photo', reverse_delete_rule=PULL))
+    photos = ListField(ReferenceField('Photo'))
 
     def save(self, *args, **kwargs):
         if not self.created:
@@ -54,3 +54,6 @@ class Photo(Document):
     def update(self, *args, **kwargs):
         self.updated = datetime.now()
         return super(Photo, self).save(*args, **kwargs)
+
+
+User.register_delete_rule(Photo, "photos", PULL)

@@ -6,9 +6,8 @@ LABEL MAINTAINER="Glauber Silva <glauber.lucio.silva@gmail.com>"
 ENV HOME=/home/weddpics
 ENV PYTHONPATH="/home/weddpics"
 
-RUN apk add --no-cache --update bash linux-headers alpine-sdk && \
-    apk add postgresql-dev gcc musl-dev openssh && \
-    apk add netcat-openbsd
+RUN apk add --no-cache --update libffi-dev gcc git openssh-client linux-headers alpine-sdk \
+   libressl-dev python3-dev musl-dev openssh netcat-openbsd
 
 RUN pip install pip==21.0.1 setuptools==41.0.1 --no-cache-dir
 

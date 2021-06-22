@@ -1,1 +1,1 @@
-web: gunicorn weddpics.manage:app
+web: gunicorn manage:app

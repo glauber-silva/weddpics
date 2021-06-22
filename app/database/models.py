@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask_mongoengine import Document
-from mongoengine import StringField, BooleanField, DateTimeField, EmailField
+from mongoengine import StringField, BooleanField, DateTimeField, EmailField, ListField, ReferenceField, PULL, CASCADE
 from flask_bcrypt import generate_password_hash, check_password_hash
 
 
@@ -13,9 +13,11 @@ class User(Document):
     surname = StringField()
     email = EmailField(required=True, unique=True)
     password = StringField(required=True, min_length=6)
-    is_staff = StringField(default=False, blank=True, null=True)
+    is_staff = BooleanField(default=False, blank=True, null=True)
+    is_active = BooleanField(default=True, blank=True, null=True)
     created = DateTimeField()
     updated = DateTimeField()
+    photos = ListField(ReferenceField('Photo', reverse_delete_rule=PULL))
 
     def save(self, *args, **kwargs):
         if not self.created:
@@ -36,7 +38,7 @@ class User(Document):
 
 class Photo(Document):
     meta = {'collection': 'photos'}
-    owner = StringField(required=True)
+    added_by = ReferenceField(User, reverse_delete_rule=CASCADE)
     description = StringField(max_length=200, blank=True, null=True)
     image_url = StringField(blank=True, null=False)
     approved = BooleanField(default=False, blank=True, null=True)

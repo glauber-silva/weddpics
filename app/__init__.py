@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from flask_bcrypt import Bcrypt
 from flask_mongoengine import MongoEngine
 from werkzeug.middleware.proxy_fix import ProxyFix
 
@@ -10,7 +11,7 @@ from app.config import DevelopmentConfig, TestingConfig, ProductionConfig
 from app.api.health.viewer import ns as health
 from app.api.photos.viewer import ns as photos
 db = MongoEngine()
-
+bcrypt = Bcrypt()
 
 def create_app(deploy_env: str = os.getenv('FLASK_ENV', 'Development')) -> Flask:
     app = Flask(__name__)
@@ -31,4 +32,5 @@ def create_app(deploy_env: str = os.getenv('FLASK_ENV', 'Development')) -> Flask
 
 def __configure_extensions(app: Flask):
     db.init_app(app)
+    bcrypt.init_app(app)
 

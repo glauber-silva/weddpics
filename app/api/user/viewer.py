@@ -16,7 +16,7 @@ class Signup(Resource):
     @ns.response(code=201, description="Create an user in Weddpics Gallery")
     def post(self):
         """
-        SignUp to app
+        SignUp Weddpics
         :return:
         """
         body = request.json

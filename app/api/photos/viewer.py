@@ -22,13 +22,14 @@ class PhotosApi(Resource):
 
     @ns.doc("post_photo")
     @ns.response(code=201, description="Create photo")
-    @jwt_required
+    @jwt_required()
     def post(self):
         """ Insert a photo"""
         user_id = get_jwt_identity()
         user = User.objects.get(id=user_id)
         body = request.json
-        photo = Photo(**body, added_by=user)
+        photo = Photo(**body)
+        photo.added_by = user
         photo.save()
         user.update(push__photos=photo)
         user.save()
@@ -41,7 +42,7 @@ class PhotoApi(Resource):
 
     @ns.doc('get_photo')
     @ns.response(code=200, description="Return a photos")
-    @jwt_required
+    @jwt_required()
     def get(self, photo_id):
         """
         Retrieves a photo with the entered id
@@ -53,7 +54,7 @@ class PhotoApi(Resource):
 
     @ns.doc('update_photo')
     @ns.response(code=201, description="Update photo information")
-    @jwt_required
+    @jwt_required()
     def put(self, photo_id):
         """
         Edit a photo with the entered id
@@ -66,7 +67,7 @@ class PhotoApi(Resource):
 
     @ns.doc('delete_photo')
     @ns.response(code=200, description="Delete a photo")
-    @jwt_required
+    @jwt_required()
     def delete(self, photo_id):
         """
         Delete a photo with the entered id

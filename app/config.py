@@ -6,6 +6,7 @@ class Config:
     PRODUCTION = False
     SECRECT_KEY = 'my_precious'
     BASE_URL = 'http://localhost:5000'
+    # MONGODB_HOST = os.environ.get('MONGODB_HOST')
     MONGODB_SETTINGS = {
         'db': os.environ.get('MONGODB_DATABASE'),
         'host': os.environ.get('MONGODB_HOST'),

@@ -11,9 +11,12 @@ from app.api import api_bp
 from app.config import DevelopmentConfig, TestingConfig, ProductionConfig
 from app.api.health.viewer import ns as health
 from app.api.photos.viewer import ns as photos
+from flask_cors import CORS
+
 db = MongoEngine()
 bcrypt = Bcrypt()
 jwt = JWTManager()
+cors = CORS()
 
 
 def create_app(deploy_env: str = os.getenv('FLASK_ENV', 'Development')) -> Flask:
@@ -37,3 +40,4 @@ def __configure_extensions(app: Flask):
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
+    cors.init_app(app)

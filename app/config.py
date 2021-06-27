@@ -4,7 +4,6 @@ import os
 class Config:
     DEBUG = True
     PRODUCTION = False
-    SECRECT_KEY = 'my_precious'
     BASE_URL = 'http://localhost:5000'
     # MONGODB_HOST = os.environ.get('MONGODB_HOST')
     MONGODB_SETTINGS = {
@@ -14,6 +13,13 @@ class Config:
         'username': os.environ.get('MONGODB_USERNAME'),
         'password': os.environ.get('MONGODB_PASSWORD')
     }
+
+    SECRECT_KEY = os.urandom(32)
+    S3_BUCKET = os.environ.get("S3_BUCKET_NAME")
+    S3_KEY = os.environ.get("S3_ACCESS_KEY")
+    S3_SECRET = os.environ.get("S3_SECRET_ACCESS_KEY")
+    S3_LOCATION = f"https://{S3_BUCKET}.s3.amazonaws.com/"
+
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
 
 

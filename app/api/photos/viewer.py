@@ -17,8 +17,8 @@ class PhotosApi(Resource):
         """
         Return a list of Photos
         """
-        photos = Photo.objects().to_json()
-        return make_response(photos, HTTPStatus.OK)
+        photos = Photo.objects.all()
+        return make_response(jsonify(photos), HTTPStatus.OK)
 
     @ns.doc("post_photo")
     @ns.response(code=201, description="Create photo")
@@ -33,7 +33,7 @@ class PhotosApi(Resource):
         photo.save()
         user.update(push__photos=photo)
         user.save()
-        return make_response(photo.to_json(), HTTPStatus.CREATED)
+        return make_response(jsonify(photo), HTTPStatus.CREATED)
 
 
 @ns.route('/<photo_id>')
@@ -50,7 +50,7 @@ class PhotoApi(Resource):
         :return:
         """
         photo = Photo.objects.get(id=photo_id)
-        return make_response(photo.to_json(), HTTPStatus.OK)
+        return make_response(jsonify(photo), HTTPStatus.OK)
 
     @ns.doc('update_photo')
     @ns.response(code=201, description="Update photo information")

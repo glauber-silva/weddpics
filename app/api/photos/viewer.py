@@ -1,10 +1,13 @@
 from http import HTTPStatus
+import logging
 
+import bson
 from flask import make_response, jsonify, request
 from flask_restx import Resource, Namespace
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app.database.models import Photo, User
+from app.helpers.s3 import s3_upload_file
 
 ns = Namespace("photos", description="See and manipulate information related to wedding photos")
 
@@ -25,15 +28,16 @@ class PhotosApi(Resource):
     @jwt_required()
     def post(self):
         """ Insert a photo"""
+        file = request.files['file']
         user_id = get_jwt_identity()
-        user = User.objects.get(id=user_id)
-        body = request.json
-        photo = Photo(**body)
-        photo.added_by = user
+        user = User.objects.get(id=bson.objectid.ObjectId(user_id))
+        image_url = s3_upload_file(file)
+        photo = Photo(added_by=user, description=request.form['description'], image_url=image_url)
         photo.save()
         user.update(push__photos=photo)
         user.save()
-        return make_response(jsonify(photo), HTTPStatus.CREATED)
+        return make_response(jsonify({"message": "Image included"}),
+                             HTTPStatus.CREATED)
 
 
 @ns.route('/<photo_id>')

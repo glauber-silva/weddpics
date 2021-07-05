@@ -1,6 +1,6 @@
 import os
 
-from flask import url_for, Blueprint
+from flask import Blueprint
 from flask_restx import Api
 from app.api.health.viewer import ns as health
 from app.api.photos.viewer import ns as photos

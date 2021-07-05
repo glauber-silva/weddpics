@@ -1,20 +1,33 @@
+import base64
+import os
+import uuid
+from os import getenv
+
 import boto3
-import botocore
+from botocore.exceptions import NoCredentialsError, ClientError, ValidationError
+from botocore.config import Config
 
-from flask import current_app
+BUCKET_NAME = getenv('S3_BUCKET_NAME', 'weddpics')
+S3_LOCATION = f"https://{BUCKET_NAME}.s3.amazonaws.com/"
+ACCESS_KEY = getenv('S3_ACCESS_KEY', None)
+SECRET_ACCESS_KEY = getenv('S3_SECRET_ACCESS_KEY', None)
 
 
-s3 = boto3.client("s3",
-                  aws_access_key_id=current_app.config['S3_KEY'],
-                  aws_secret_access_key=current_app.config['S3_SECRET'])
+def s3_client():
+    return boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_ACCESS_KEY,
+                        config=Config(signature_version='s3v4'))
 
 
-def upload_file_to_s3(file, bucket_name, acl="public-read"):
-
+def s3_upload_file(photo):
+    client = s3_client()
+    body = photo.stream.read()
     try:
-        s3.upload_fileobj(file, bucket_name, file.name, ExtraArgs={"ACL": acl, "ContentType": file.content_type})
-    except Exception as e:
-        print(f"Problems trying to upload {file.name} : {e}")
-        return e
+        response = client.put_object(Key=f"{photo.filename}", Body=body, Bucket=BUCKET_NAME,
+                          ContentType=photo.mimetype, ACL='public-read')
 
-    return f"{current_app.config['S3_LOCATION']}{file.name}"
+        print(f"S3 - RESPONSE {response}")
+        photo_url = f"{S3_LOCATION}{photo.filename}"
+    except (NoCredentialsError, ClientError) as e:
+        raise ValidationError(f"It is not possible to add this photo. {e}")
+
+    return photo_url

@@ -1,11 +1,10 @@
 from datetime import datetime
 
 from flask_mongoengine import Document
-from mongoengine import StringField, BooleanField, DateTimeField, EmailField, ListField, ReferenceField, PULL, CASCADE
+from mongoengine import StringField, BooleanField, DateTimeField, EmailField, ListField, ReferenceField, PULL, CASCADE, \
+    URLField
 from flask_bcrypt import generate_password_hash, check_password_hash
 
-
-# TODO Think about a Model Base class to add created and updated fields
 
 class User(Document):
     meta = {'collection': 'users'}
@@ -40,7 +39,7 @@ class Photo(Document):
     meta = {'collection': 'photos'}
     added_by = ReferenceField(User, reverse_delete_rule=CASCADE)
     description = StringField(max_length=200, blank=True, null=True)
-    image_url = StringField(blank=True, null=False)
+    image_url = URLField(blank=True, null=False)
     approved = BooleanField(default=False, blank=True, null=True)
     created = DateTimeField()
     updated = DateTimeField()

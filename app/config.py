@@ -11,7 +11,8 @@ class Config:
         'host': os.environ.get('MONGODB_HOST'),
         'port': 27017,
         'username': os.environ.get('MONGODB_USERNAME'),
-        'password': os.environ.get('MONGODB_PASSWORD')
+        'password': os.environ.get('MONGODB_PASSWORD'),
+        'connect': False
     }
 
     SECRECT_KEY = os.urandom(32)
@@ -19,7 +20,8 @@ class Config:
     S3_KEY = os.environ.get("S3_ACCESS_KEY")
     S3_SECRET = os.environ.get("S3_SECRET_ACCESS_KEY")
     S3_LOCATION = f"https://{S3_BUCKET}.s3.amazonaws.com/"
-
+    AWS_DEFAULT_REGION = os.environ.get("AWS_DEFAULT_REGION")
+    CORS_HEADER = "Content-Type"
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
 
 

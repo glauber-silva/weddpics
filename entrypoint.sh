@@ -6,4 +6,4 @@ while ! nc -z mongodb 27017; do
   sleep 0.1
 done
 
-uwsgi --ini ./uwsgi.ini
+uwsgi --http-socket 0.0.0.0:5000 --wsgi-file wsgi.py --callable application --processes 4 --threads 2

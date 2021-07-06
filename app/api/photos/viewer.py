@@ -45,7 +45,7 @@ class PhotosApi(Resource):
 class PhotoApi(Resource):
 
     @ns.doc('get_photo')
-    @ns.response(code=200, description="Return a photos")
+    @ns.response(code=200, description="Return a photo")
     @jwt_required()
     def get(self, photo_id):
         """

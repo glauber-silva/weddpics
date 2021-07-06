@@ -18,7 +18,7 @@ from flask_cors import CORS
 db = MongoEngine()
 bcrypt = Bcrypt()
 jwt = JWTManager()
-cors = CORS()
+
 
 
 def create_app(deploy_env: str = os.getenv('FLASK_ENV', 'Development')) -> Flask:
@@ -42,7 +42,13 @@ def create_app(deploy_env: str = os.getenv('FLASK_ENV', 'Development')) -> Flask
 
 
 def __configure_extensions(app: Flask):
+    cors = CORS(app, resources={
+        r"/*": {
+            "origin": "*"
+        }
+    })
+    cors.init_app(app)
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
-    cors.init_app(app)
+

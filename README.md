@@ -25,7 +25,7 @@ Running application: https://weddpics-client.herokuapp.com
 
 ## Instalation
 1. Clone  respository: `git clone https://gitlab.com/glaubersilva/weddpics`.
-2. `Access the directory: `cd weddpics`.
+2. Access the directory: `cd weddpics`.
 3. run: 
    ```bash
    sudo apt-get install docker

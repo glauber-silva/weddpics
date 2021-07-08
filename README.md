@@ -41,8 +41,14 @@ docker-compose version 1.21.2, build a133471
 ``` 
 
 ## Start the app
-1. In the project root directory run: `docker-compose up -d` 
-2. After all container got running, run: `sudo docker ps` should appears:
+For start the application its necessary a S3 account, you can found information about how setting up here: https://docs.aws.amazon.com/AmazonS3/latest/userguide/setting-up-s3.html
+
+Update the env_app file with AWS S3 key and follow:
+
+1. In the project root set the env files for docker-compose: `mv env_app .env`
+2. In the project root directory run: `docker-compose up -d` 
+3. After all container got running, run: `sudo docker ps` should appears:
+
 
 ```bash
 CONTAINER ID   IMAGE                      COMMAND                  CREATED       STATUS              PORTS                      NAMES

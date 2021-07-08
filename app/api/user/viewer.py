@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 from http import HTTPStatus
 
@@ -23,7 +24,13 @@ class Signup(Resource):
         user = User(**body)
         user.hash_password()
         user.save()
-        return make_response(user.to_json(), HTTPStatus.CREATED)
+        expires = datetime.timedelta(days=1)
+        access_token = create_access_token(identity=str(user.id), expires_delta=expires)
+        payload = {
+            "user": {"name": user.name, "surname": user.surname, "email": user.email},
+            "token": access_token
+        }
+        return make_response(jsonify(payload), HTTPStatus.CREATED)
 
 
 @ns.route('/login')
@@ -43,4 +50,5 @@ class Login(Resource):
 
         expires = datetime.timedelta(days=1)
         access_token = create_access_token(identity=str(user.id), expires_delta=expires)
-        return make_response(jsonify({'token': access_token}), HTTPStatus.OK)
+        return make_response(jsonify({'token': access_token, 'user': {'name': user.name, 'surname': user.surname,
+                                                                      'email': user.email}}), HTTPStatus.OK)
